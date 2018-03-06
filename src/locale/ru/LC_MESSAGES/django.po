@@ -1,0 +1,3 @@
+# run `./manage.py makemessages`
+# add translations
+# run `./manage.py compilemessages`
