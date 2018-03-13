@@ -1,3 +1,4 @@
+import datetime
 import os
 
 import environ
@@ -12,6 +13,8 @@ CI = env('CI', cast=bool, default=False)
 SECRET_KEY = env('SECRET_KEY')
 
 SITE_ROOT = root()
+
+SITE_ID = 1
 
 MEDIA_URL = env('MEDIA_URL')
 MEDIA_ROOT = env('MEDIA_ROOT')
@@ -74,13 +77,21 @@ if not DEBUG:
     SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
 INSTALLED_APPS = [
+    'accounts',
+
     'rest_framework',
     'rest_framework.authtoken',
+
+    'rest_auth',
+    'rest_auth.registration',
+    'allauth',
+    'allauth.account',
 
     'django_filters',
 
     'suit',
     'django.contrib.admin',
+    'django.contrib.sites',
     'django.contrib.postgres',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -122,14 +133,15 @@ TEMPLATES = [
     },
 ]
 
+# drf configs
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'app.renderers.AppJSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissions',
@@ -143,8 +155,23 @@ REST_FRAMEWORK = {
     'TIME_FORMAT': '%H:%M',
 }
 
+# celery configs
 CELERY_ALWAYS_EAGER = env('CELERY_ALWAYS_EAGER', cast=bool, default=DEBUG)  # by default in debug mode we run all celery tasks in foregroud.
 CELERY_TIMEZONE = env('TIME_ZONE')
 CELERY_ENABLE_UTC = False
 CELERY_BROKER_URL = env('CELERY_BACKEND')
 CELERY_RESULT_BACKEND = env('CELERY_BACKEND')
+
+
+# django-rest-framework-jwt configs
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
+    'JWT_ALLOW_REFRESH': True,
+}
+
+# django-rest-auth-configs
+REST_USE_JWT = True
+
+# django-allauth configs
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False

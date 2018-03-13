@@ -1,5 +1,5 @@
-from django.db import models
 from behaviors.behaviors import Timestamped
+from django.db import models
 
 
 class DefaultQueryset(models.QuerySet):
