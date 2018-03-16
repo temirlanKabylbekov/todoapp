@@ -78,6 +78,7 @@ if not DEBUG:
 
 INSTALLED_APPS = [
     'accounts',
+    'todos',
 
     'rest_framework',
     'rest_framework.authtoken',
@@ -153,6 +154,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 24,
     'TIME_FORMAT': '%H:%M',
+    'DATETIME_FORMAT': '%Y-%m-%d %H:%M',
 }
 
 # celery configs

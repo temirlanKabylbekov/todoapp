@@ -4,6 +4,7 @@ from accounts.models import Profile
 from app.test import ApiTestCase, status
 
 
+# TODO: add tests for login, logout and getting authenticated user personal data
 class TestUserSignup(ApiTestCase):
 
     should_be_logged_in = False
