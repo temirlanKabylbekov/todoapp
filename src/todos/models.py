@@ -1,9 +1,30 @@
 from django.db import models
 
-from app.models import TimestampedModel
+from app.models import DefaultManager, DefaultQueryset, TimestampedModel
+
+
+class TodoQueryset(DefaultQueryset):
+
+    def created_by_user(self, user):
+        return self.filter(todolist__author=user)
+
+    def assigned_to_user(self, user):
+        return self.filter(assigned=user)
+
+    def accessed_to_user(self, user):
+        return self.filter(todolist__accessed_users=user)
+
+    def available_to_user(self, user):
+        available_to_user = self.created_by_user(user) | self.assigned_to_user(user) | self.accessed_to_user(user)
+        return available_to_user.distinct()
+
+    def for_viewset(self, user):
+        return self.available_to_user(user).order_by('id')
 
 
 class Todo(TimestampedModel):
+
+    objects = DefaultManager.from_queryset(TodoQueryset)()
 
     title = models.CharField(max_length=255)
     due_date = models.DateTimeField(null=True, blank=True)

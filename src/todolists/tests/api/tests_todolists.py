@@ -4,16 +4,6 @@ from app.test import ApiTestCase, mixer, status
 from todolists.models import TodoList
 
 
-@pytest.fixture(scope='class')
-def todolists(request):
-    user = request.cls.user
-    another_user = request.cls.another_user
-
-    request.cls.strange_todolist = mixer.blend('todolists.TodoList', author=another_user)
-    request.cls.created_todolist = mixer.blend('todolists.TodoList', author=user)
-    request.cls.accessed_todolist = mixer.blend('todolists.TodoList', author=another_user, accessed_users=user)
-
-
 @pytest.mark.parametrize('method_name, url, payload', [
     ('get', '/api/v1/lists/', ''),
     ('get', '/api/v1/lists/1/', ''),

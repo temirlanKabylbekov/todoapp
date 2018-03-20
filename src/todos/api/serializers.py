@@ -25,4 +25,6 @@ class TodoSerializer(serializers.ModelSerializer):
             'is_important',
             'has_completed',
             'assigned',
+            'todolist',
         ]
+        extra_kwargs = {'title': {'required': False}}

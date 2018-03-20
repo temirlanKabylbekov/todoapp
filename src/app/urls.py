@@ -5,9 +5,11 @@ from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 
 from todolists.api.views import TodoListViewset
+from todos.api.views import TodoViewset
 
 router = routers.SimpleRouter()
 router.register('lists', TodoListViewset)
+router.register('todos', TodoViewset)
 
 api_v1 = (
     url(r'^auth/', include('rest_auth.urls')),
