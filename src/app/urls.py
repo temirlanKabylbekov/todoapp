@@ -4,10 +4,10 @@ from django.contrib import admin
 from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 
-from todos.api.views import TodoViewSet
+from todolists.api.views import TodoListViewset
 
 router = routers.SimpleRouter()
-router.register(r'todos', TodoViewSet)
+router.register('lists', TodoListViewset)
 
 api_v1 = (
     url(r'^auth/', include('rest_auth.urls')),

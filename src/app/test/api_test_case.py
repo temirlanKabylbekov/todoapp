@@ -10,18 +10,11 @@ USER_PASSWORD = '123456'
 class ApiTestCase(TestCase):
 
     c = APIClient()
-    unauth_c = APIClient()
-
-    should_create_another_user = False
-    should_be_logged_in = True
 
     @classmethod
     def setUpClass(cls):
-        if cls.should_create_another_user is True:
-            cls.create_another_user()
-
-        if cls.should_be_logged_in is True:
-            cls._login()
+        cls.create_another_user()
+        cls._login()
 
         super().setUpClass()
 

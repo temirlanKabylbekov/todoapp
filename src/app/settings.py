@@ -79,6 +79,7 @@ if not DEBUG:
 INSTALLED_APPS = [
     'accounts',
     'todos',
+    'todolists',
 
     'rest_framework',
     'rest_framework.authtoken',

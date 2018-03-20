@@ -3,6 +3,16 @@ from rest_framework import serializers
 from todos.models import Todo
 
 
+class TodoFastSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Todo
+        fields = [
+            'id',
+            'title',
+        ]
+
+
 class TodoSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -16,9 +26,3 @@ class TodoSerializer(serializers.ModelSerializer):
             'has_completed',
             'assigned',
         ]
-
-
-class TodoCreateSerializer(TodoSerializer):
-
-    class Meta(TodoSerializer.Meta):
-        fields = TodoSerializer.Meta.fields + ['author']
