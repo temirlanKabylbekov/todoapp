@@ -77,6 +77,7 @@ if not DEBUG:
     SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
 INSTALLED_APPS = [
+    'app',
     'accounts',
     'todos',
     'todolists',
@@ -88,6 +89,9 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'allauth',
     'allauth.account',
+
+    'anymail',
+    'mail_templated',
 
     'django_filters',
 
@@ -134,6 +138,14 @@ TEMPLATES = [
         },
     },
 ]
+
+ENABLE_NOTIFICATIONS = env('ENABLE_NOTIFICATIONS', cast=bool)
+
+# email
+EMAIL_ENABLED = env('EMAIL_ENABLED', cast=bool)
+EMAIL_BACKEND = env('EMAIL_BACKEND')
+EMAIL_FROM = env('EMAIL_FROM')
+ANYMAIL_SENDGRID_API_KEY = env('EMAIL_SENDGRID_KEY')
 
 # drf configs
 REST_FRAMEWORK = {

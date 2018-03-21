@@ -1,0 +1,6 @@
+{% extends 'mail_templated/base.tpl' %}
+
+{% block subject %}{% endblock %}
+
+{% block body %}{% endblock %} {# plain text #}
+{% block html %}{% endblock %} {# html content #}
