@@ -190,3 +190,4 @@ REST_USE_JWT = True
 # django-allauth configs
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+# TODO: add signup by email sending: all users must have email
