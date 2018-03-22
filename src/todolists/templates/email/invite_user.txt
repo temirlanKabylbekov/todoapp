@@ -1,0 +1,9 @@
+{% extends 'email/base.txt' %}
+
+{% block subject %}
+Пользователь {{ inviter_user.get_full_name }} поделился с вами списком
+{% endblock %}
+
+{% block body %}
+Пользователь {{ inviter_user.get_full_name }} поделился с вами списком «{{ todolist.name }}»
+{% endblock %}

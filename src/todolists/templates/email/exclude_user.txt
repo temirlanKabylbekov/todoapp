@@ -1,0 +1,9 @@
+{% extends 'email/base.txt' %}
+
+{% block subject %}
+Пользователь {{ inviter_user.get_full_name }} удалил вас из списка
+{% endblock %}
+
+{% block body %}
+Пользователь {{ inviter_user.get_full_name }} удалил вас из списка «{{ todolist.name }}»
+{% endblock %}

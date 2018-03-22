@@ -3,6 +3,7 @@ from django.core.validators import MinLengthValidator
 from django.db import models
 
 from app.models import DefaultManager, DefaultModel, DefaultQueryset
+from todolists import tasks
 
 
 class TodoListQueryset(DefaultQueryset):
@@ -32,14 +33,16 @@ class TodoList(DefaultModel):
     def __str__(self):
         return self.name
 
-    def invite_user(self, user):
-        if self.accessed_users.filter(id=user.id).exists():
+    def invite_user(self, caller_user, callee_user):
+        if self.accessed_users.filter(id=callee_user.id).exists():
             raise ValidationError('user is already invited')
 
-        self.accessed_users.add(user)
+        self.accessed_users.add(callee_user)
+        tasks.send_email_about_invitation_to_todolist.delay(caller_user.id, callee_user.id, self.id)
 
-    def exclude_user(self, user):
-        if not self.accessed_users.filter(id=user.id).exists():
+    def exclude_user(self, caller_user, callee_user):
+        if not self.accessed_users.filter(id=callee_user.id).exists():
             raise ValidationError('user is not invited')
 
-        self.accessed_users.remove(user)
+        self.accessed_users.remove(callee_user)
+        tasks.send_email_about_excludation_from_todolist.delay(caller_user.id, callee_user.id, self.id)

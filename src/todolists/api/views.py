@@ -50,7 +50,7 @@ class TodoListViewset(MultiSerializerMixin, viewsets.ModelViewSet):
         instance = self.get_object()
 
         try:
-            instance.invite_user(user)
+            instance.invite_user(request.user, user)
         except DjangoValidationError as e:
             raise ValidationError(e.message)
 
@@ -62,7 +62,7 @@ class TodoListViewset(MultiSerializerMixin, viewsets.ModelViewSet):
         instance = self.get_object()
 
         try:
-            instance.exclude_user(user)
+            instance.exclude_user(request.user, user)
         except DjangoValidationError as e:
             raise ValidationError(e.message)
 
