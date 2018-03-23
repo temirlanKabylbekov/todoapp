@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.exceptions import PermissionDenied
 
+from accounts.api.serializers import UserSerializer
 from comments.models import Comment
 from todos.models import Todo
 
@@ -34,7 +35,9 @@ class CommentCreateSerializer(CommentUpdateSerializer):
 
 
 class CommentTodoSerializer(serializers.ModelSerializer):
-    # TODO: вынести в поле для todo retrieve
+
+    author = UserSerializer()
+
     class Meta:
         model = Comment
         fields = ['author', 'text']

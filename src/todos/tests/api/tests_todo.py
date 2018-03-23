@@ -1,6 +1,6 @@
 import pytest
 
-from app.test import ApiTestCase, status
+from app.test import ApiTestCase, mixer, status
 from todos.models import Todo
 
 
@@ -43,6 +43,12 @@ class TestTodoRetrieving(ApiTestCase):
     def test_accessed_todo_is_available(self):
         response = self.api_get('/api/v1/todos/%d/' % self.accessed_todo.id)
         assert Todo.objects.get(id=response['id']) == self.accessed_todo
+
+    def test_getting_todo_comments(self):
+        mixer.blend('comments.Comment', todo=self.created_todo, author=self.user, text='эпюра напряжений')
+        response = self.api_get('/api/v1/todos/%d/' % self.created_todo.id)
+        assert response['comments'][0]['text'] == 'эпюра напряжений'
+        assert response['comments'][0]['author']['username'] == self.user.username
 
 
 @pytest.mark.usefixtures('todolists', 'todos')

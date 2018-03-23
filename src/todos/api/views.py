@@ -2,15 +2,20 @@ from rest_framework import viewsets
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.permissions import IsAuthenticated
 
+from app.api.views import MultiSerializerMixin
 from todos.api import serializers
 from todos.models import Todo
 
 
-class TodoViewset(viewsets.ModelViewSet):
+class TodoViewset(MultiSerializerMixin, viewsets.ModelViewSet):
 
     queryset = Todo.objects.all()
     permission_classes = [IsAuthenticated]
+
     serializer_class = serializers.TodoSerializer
+    serializer_action_classes = {
+        'retrieve': serializers.TodoDetailSerializer,
+    }
 
     def get_queryset(self):
         return Todo.objects.for_viewset(self.request.user)

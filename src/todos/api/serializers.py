@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from comments.api.serializers import CommentTodoSerializer
 from todos.models import Todo
 
 
@@ -28,3 +29,11 @@ class TodoSerializer(serializers.ModelSerializer):
             'todolist',
         ]
         extra_kwargs = {'title': {'required': False}}
+
+
+class TodoDetailSerializer(TodoSerializer):
+
+    comments = CommentTodoSerializer(many=True)
+
+    class Meta(TodoSerializer.Meta):
+        fields = TodoSerializer.Meta.fields + ['comments']
