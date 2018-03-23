@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     'accounts',
     'todos',
     'todolists',
+    'comments',
 
     'rest_framework',
     'rest_framework.authtoken',

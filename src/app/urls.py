@@ -4,12 +4,14 @@ from django.contrib import admin
 from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 
+from comments.api.views import CommentViewset
 from todolists.api.views import TodoListViewset
 from todos.api.views import TodoViewset
 
 router = routers.SimpleRouter()
 router.register('lists', TodoListViewset)
 router.register('todos', TodoViewset)
+router.register('comments', CommentViewset)
 
 api_v1 = (
     url(r'^auth/', include('rest_auth.urls')),
