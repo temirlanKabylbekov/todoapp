@@ -35,6 +35,9 @@ class Todo(TimestampedModel):
     assigned = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='assigned_todos', null=True, blank=True)
     todolist = models.ForeignKey('todolists.TodoList', on_delete=models.CASCADE, related_name='todos', null=True)
 
+    class Meta:
+        order_with_respect_to = 'todolist'
+
     def __str__(self):
         return self.title
 

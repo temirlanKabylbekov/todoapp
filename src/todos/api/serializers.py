@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from comments.api.serializers import CommentTodoSerializer
 from todos.models import Todo
@@ -37,3 +38,16 @@ class TodoDetailSerializer(TodoSerializer):
 
     class Meta(TodoSerializer.Meta):
         fields = TodoSerializer.Meta.fields + ['comments']
+
+
+class TodoPositionsInTodoListSerializer(serializers.Serializer):
+
+    todos = serializers.ListField(child=serializers.IntegerField())
+
+    def validate_todos(self, todo_ids):
+        todos = Todo.objects.filter(todolist=self.context['todolist']).order_by('id').values_list('id', flat=True)
+
+        if list(todos) != sorted(todo_ids):
+            raise ValidationError('contains strange todo or not all todos passed')
+
+        return todo_ids

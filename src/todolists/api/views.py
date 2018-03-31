@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from app.api.views import MultiSerializerMixin
 from todolists.api import serializers
 from todolists.models import TodoList
-from todos.api.serializers import TodoSerializer
+from todos.api.serializers import TodoPositionsInTodoListSerializer, TodoSerializer
 
 
 class TodoListViewset(MultiSerializerMixin, viewsets.ModelViewSet):
@@ -65,5 +65,19 @@ class TodoListViewset(MultiSerializerMixin, viewsets.ModelViewSet):
             instance.exclude_user(request.user, user)
         except DjangoValidationError as e:
             raise ValidationError(e.message)
+
+        return Response(status=status.HTTP_200_OK)
+
+    @detail_route(methods=['put'], permission_classes=[IsAuthenticated])
+    def todo_positions(self, request, pk=None):
+        instance = self.get_object()
+
+        context = self.get_serializer_context()
+        context['todolist'] = instance
+
+        serializer = TodoPositionsInTodoListSerializer(data=request.data, context=context)
+        serializer.is_valid(raise_exception=True)
+
+        instance.set_todo_order(serializer.validated_data['todos'])
 
         return Response(status=status.HTTP_200_OK)
