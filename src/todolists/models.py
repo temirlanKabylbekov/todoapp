@@ -18,7 +18,7 @@ class TodoListQueryset(DefaultQueryset):
         return self.created_by_user(user) | self.accessed_to_user(user)
 
     def for_viewset(self, user):
-        return self.available_to_user(user).prefetch_related('todos').order_by('id')
+        return self.available_to_user(user).prefetch_related('todos', 'accessed_users').order_by('id')
 
 
 class TodoList(DefaultModel):
