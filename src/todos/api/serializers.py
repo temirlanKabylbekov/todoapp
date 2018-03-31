@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from comments.api.serializers import CommentTodoSerializer
+from todolists.choices import TODO_POSITIONS
 from todos.models import Todo
 
 
@@ -51,3 +52,9 @@ class TodoPositionsInTodoListSerializer(serializers.Serializer):
             raise ValidationError('contains strange todo or not all todos passed')
 
         return todo_ids
+
+
+class NamedTodoPositionsInTodoListSerializer(serializers.Serializer):
+
+    name = serializers.ChoiceField(choices=TODO_POSITIONS, required=True)
+    asc = serializers.BooleanField(default=True)

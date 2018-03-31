@@ -10,7 +10,8 @@ from rest_framework.response import Response
 from app.api.views import MultiSerializerMixin
 from todolists.api import serializers
 from todolists.models import TodoList
-from todos.api.serializers import TodoPositionsInTodoListSerializer, TodoSerializer
+from todos.api.serializers import (
+    NamedTodoPositionsInTodoListSerializer, TodoPositionsInTodoListSerializer, TodoSerializer)
 
 
 class TodoListViewset(MultiSerializerMixin, viewsets.ModelViewSet):
@@ -79,5 +80,15 @@ class TodoListViewset(MultiSerializerMixin, viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
 
         instance.set_todo_order(serializer.validated_data['todos'])
+
+        return Response(status=status.HTTP_200_OK)
+
+    @detail_route(methods=['put'], permission_classes=[IsAuthenticated])
+    def todo_positions_by_name(self, request, pk=None):
+        serializer = NamedTodoPositionsInTodoListSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        asc = serializer.validated_data['asc']
+        getattr(self.get_object(), 'set_todo_order_by_%s' % serializer.validated_data['name'])(asc=asc)
 
         return Response(status=status.HTTP_200_OK)

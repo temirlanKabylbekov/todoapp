@@ -73,3 +73,29 @@ class TestInviteAndExcludeUserTodoListMethods(TestCase):
     def test_sending_exclude_email_task_called(self, invite_task, exclude_task):
         self.todolist.exclude_user(self.ringleader, self.invited_user)
         assert exclude_task.called is True
+
+
+class TestTodoListSetTodoOrderMethods(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.todolist = mixer.blend('todolists.TodoList')
+        mixer.blend('todos.Todo', todolist=cls.todolist, title='A', is_important=True)
+        mixer.blend('todos.Todo', todolist=cls.todolist, title='B', is_important=False)
+        mixer.blend('todos.Todo', todolist=cls.todolist, title='C')
+
+    def test_set_by_alphabet_asc_direction(self):
+        self.todolist.set_todo_order_by_alphabet()
+        assert list(self.todolist.todos.values_list('title', flat=True)) == ['A', 'B', 'C']
+
+    def test_set_by_alphabet_desc_direction(self):
+        self.todolist.set_todo_order_by_alphabet(asc=False)
+        assert list(self.todolist.todos.values_list('title', flat=True)) == ['C', 'B', 'A']
+
+    def test_set_by_importance_asc_direction(self):
+        self.todolist.set_todo_order_by_importance()
+        assert list(self.todolist.todos.values_list('title', flat=True)) == ['C', 'B', 'A']
+
+    def test_set_by_importance_desc_direction(self):
+        self.todolist.set_todo_order_by_importance(asc=False)
+        assert list(self.todolist.todos.values_list('title', flat=True)) == ['A', 'C', 'B']

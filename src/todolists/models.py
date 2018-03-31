@@ -46,3 +46,13 @@ class TodoList(DefaultModel):
 
         self.accessed_users.remove(callee_user)
         tasks.send_email_about_excludation_from_todolist.delay(caller_user.id, callee_user.id, self.id)
+
+    def set_todo_order_by_alphabet(self, asc=True):
+        field = 'title' if asc is True else '-title'
+        todo_ids = self.todos.order_by(field).values_list('id', flat=True)
+        self.set_todo_order(list(todo_ids))
+
+    def set_todo_order_by_importance(self, asc=True):
+        field = 'is_important' if asc is True else '-is_important'
+        todo_ids = self.todos.order_by(field).values_list('id', flat=True)
+        self.set_todo_order(list(todo_ids))
